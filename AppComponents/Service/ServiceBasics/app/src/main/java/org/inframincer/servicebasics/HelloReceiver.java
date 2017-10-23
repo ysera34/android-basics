@@ -16,5 +16,6 @@ public class HelloReceiver extends BroadcastReceiver {
 //        throw new UnsupportedOperationException("Not yet implemented");
         String result = intent.getStringExtra("helloServiceResult");
         Log.i(TAG, "onReceive: result: " + result);
+        HelloObservable.getInstance().updateValue(result);
     }
 }

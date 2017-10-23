@@ -4,11 +4,18 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+
+import java.util.Observable;
+import java.util.Observer;
 
 import static android.app.PendingIntent.FLAG_ONE_SHOT;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity
+        implements View.OnClickListener, Observer {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +25,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.start_foo_button).setOnClickListener(this);
         findViewById(R.id.start_baz_button).setOnClickListener(this);
         findViewById(R.id.start_service).setOnClickListener(this);
+
+        HelloObservable.getInstance().addObserver(this);
     }
 
     @Override
@@ -40,5 +49,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startService(intent);
                 break;
         }
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        Log.i(TAG, "Observable update: " + String.valueOf(arg));
     }
 }
