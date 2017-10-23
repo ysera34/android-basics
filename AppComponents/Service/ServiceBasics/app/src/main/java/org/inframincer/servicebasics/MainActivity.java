@@ -1,5 +1,6 @@
 package org.inframincer.servicebasics;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,6 +14,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         findViewById(R.id.start_foo_button).setOnClickListener(this);
         findViewById(R.id.start_baz_button).setOnClickListener(this);
+        findViewById(R.id.start_service).setOnClickListener(this);
     }
 
     @Override
@@ -23,6 +25,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.start_baz_button:
                 HelloIntentService.startActionBaz(this, "BazParam1", "BazParam2");
+                break;
+            case R.id.start_service:
+                Intent intent = new Intent(this, HelloService.class);
+                startService(intent);
                 break;
         }
     }
