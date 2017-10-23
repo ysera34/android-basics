@@ -26,6 +26,12 @@
             android:enabled="true"
             android:exported="false">
         </service>
+
+        <receiver
+            android:name=".HelloReceiver"
+            android:enabled="true"
+            android:exported="false">
+        </receiver>
     </application>
 
 </manifest>

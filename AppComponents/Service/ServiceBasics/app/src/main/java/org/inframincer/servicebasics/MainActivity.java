@@ -1,9 +1,12 @@
 package org.inframincer.servicebasics;
 
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import static android.app.PendingIntent.FLAG_ONE_SHOT;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,6 +31,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.start_service:
                 Intent intent = new Intent(this, HelloService.class);
+//                startService(intent);
+
+                Intent broadcastReceiverIntent = new Intent(this, HelloReceiver.class);
+                PendingIntent pendingIntent =
+                        PendingIntent.getBroadcast(this, 100, broadcastReceiverIntent, FLAG_ONE_SHOT);
+                intent.putExtra("hello_receiver", pendingIntent);
                 startService(intent);
                 break;
         }

@@ -1,5 +1,6 @@
 package org.inframincer.servicebasics;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
@@ -8,9 +9,12 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
+import android.util.Log;
 import android.widget.Toast;
 
 public class HelloService extends Service {
+
+    private static final String TAG = HelloService.class.getSimpleName();
 
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
@@ -23,6 +27,8 @@ public class HelloService extends Service {
 
         @Override
         public void handleMessage(Message msg) {
+            Log.i(TAG, "handleMessage: ");
+            /*
 //            super.handleMessage(msg);
             // Normally we would do some work here, like download a file.
             // For our sample, we just sleep for 5 seconds.
@@ -34,6 +40,18 @@ public class HelloService extends Service {
             }
             // Stop the service using the startId, so that we don't stop
             // the service in the middle of handling another job
+            stopSelf(msg.arg1);
+            */
+            PendingIntent receiver = ((Intent) msg.obj).getParcelableExtra("hello_receiver");
+            if (receiver != null) {
+                try {
+                    Intent intent = new Intent();
+                    intent.putExtra("helloServiceResult", "ok");
+                    receiver.send(getApplicationContext(), 0, intent);
+                } catch (PendingIntent.CanceledException e) {
+                    Log.e(TAG, "handleMessage: ", e.getCause());
+                }
+            }
             stopSelf(msg.arg1);
         }
     }
@@ -66,6 +84,7 @@ public class HelloService extends Service {
         // For each start request, send a message to start a job and deliver the
         // start ID so we know which request we're stopping when we finish the job
         Message msg = mServiceHandler.obtainMessage();
+        msg.obj = intent;
         msg.arg1 = startId;
         mServiceHandler.sendMessage(msg);
 
