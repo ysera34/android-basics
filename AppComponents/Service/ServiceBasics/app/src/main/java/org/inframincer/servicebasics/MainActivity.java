@@ -24,7 +24,8 @@ public class MainActivity extends AppCompatActivity
 
         findViewById(R.id.start_foo_button).setOnClickListener(this);
         findViewById(R.id.start_baz_button).setOnClickListener(this);
-        findViewById(R.id.start_service).setOnClickListener(this);
+        findViewById(R.id.service_start).setOnClickListener(this);
+        findViewById(R.id.foreground_service_start).setOnClickListener(this);
 
         HelloObservable.getInstance().addObserver(this);
     }
@@ -38,15 +39,19 @@ public class MainActivity extends AppCompatActivity
             case R.id.start_baz_button:
                 HelloIntentService.startActionBaz(this, "BazParam1", "BazParam2");
                 break;
-            case R.id.start_service:
-                Intent intent = new Intent(this, HelloService.class);
+            case R.id.service_start:
+                Intent helloServiceIntent = new Intent(this, HelloService.class);
 //                startService(intent);
 
                 Intent broadcastReceiverIntent = new Intent(this, HelloReceiver.class);
                 PendingIntent pendingIntent =
                         PendingIntent.getBroadcast(this, 100, broadcastReceiverIntent, FLAG_ONE_SHOT);
-                intent.putExtra("hello_receiver", pendingIntent);
-                startService(intent);
+                helloServiceIntent.putExtra("hello_receiver", pendingIntent);
+                startService(helloServiceIntent);
+                break;
+            case R.id.foreground_service_start:
+                Intent helloForegroundServiceIntent = new Intent(this, HelloForegroundService.class);
+                startService(helloForegroundServiceIntent);
                 break;
         }
     }
